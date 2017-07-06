@@ -19,6 +19,11 @@ PS: [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html) �
 #### 流程图下载
 你可以从 Google Drive 下载[流程图](https://drive.google.com/file/d/0B9dg6tL91XqfUnpvUk9VWnN3Uzg/view?usp=sharing)。
 
+#### 注意点
+* 图中的 `DocumentFragment` 在实际代码中会用 `Virtual Dom` 代替
+* 图中的 `Compile` 在实际代码中会用 `HTML Parser` 做一些更具体的操作。
+* 图中的 `setter` 和 `getter` 方法在实际代码中，还需要对 `Array` 中`push`，`pop`方法进行拦截，还需要对 `data` 进行`深度`绑定。
+
 ## HTML Parser
 
 [pure-javascript-html-parser](http://ejohn.org/blog/pure-javascript-html-parser/)
