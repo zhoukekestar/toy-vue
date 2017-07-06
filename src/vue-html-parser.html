@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <script src='./compiler/html-parser.js'></script>
+    <script>
+    var results = "";
+
+    HTMLParser(`
+      <!-- hello world -->
+      <p id="test" name='hello'>hello <i>world
+      <input id='input' />
+      <p>Yeah!</p>
+      `, {
+      start: function( tag, attrs, unary ) {
+        results += "<" + tag;
+
+        for ( var i = 0; i < attrs.length; i++ )
+          results += " " + attrs[i].name + '="' + attrs[i].escaped + '"';
+
+        results += (unary ? "/" : "") + ">";
+      },
+      end: function( tag ) {
+        results += "</" + tag + ">";
+      },
+      chars: function( text ) {
+        results += text;
+      },
+      comment: function( text ) {
+        results += "<!--" + text + "-->";
+      }
+    });
+
+    console.log(results);
+    results == '<p id="test">hello <i>world</i></p>';
+    </script>
+  </body>
+</html>

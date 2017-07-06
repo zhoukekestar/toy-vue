@@ -43,12 +43,7 @@ Promise.resolve().then(() => console.log(5))
 console.log(6);
 /*
 output:
-1
-6
-2
-5
-3
-4
+1 6 2 5 3 4
 */
 ```
 

@@ -9,7 +9,7 @@ export function def(obj, key, value, enumerable) {
 
 export function debounce(func, wait, immediate) {
   var timeout = null;
-  
+
   return function () {
     var delay = function () {
       timeout = null;
