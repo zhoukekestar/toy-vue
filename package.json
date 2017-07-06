@@ -1,0 +1,23 @@
+{
+  "name": "toy-vue",
+  "version": "0.0.1",
+  "description": "Vue toys",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhoukekestar/toy-vue.git"
+  },
+  "keywords": [
+    "vue",
+    "toy"
+  ],
+  "author": "zhoukekestar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zhoukekestar/toy-vue/issues"
+  },
+  "homepage": "https://github.com/zhoukekestar/toy-vue#readme"
+}

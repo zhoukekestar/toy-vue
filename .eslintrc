@@ -1,0 +1,15 @@
+{
+  "extends": "airbnb",
+  "plugins": ["html"],
+  "globals": {
+    "Vue": true
+  },
+  "setting": {
+    "html/html-extensions": [".html"]
+  },
+  "rules": {
+    "func-names": ["warn", "as-needed"],
+    "no-param-reassign": "warn",
+    "no-unused-vars": "warn"
+  }
+}
