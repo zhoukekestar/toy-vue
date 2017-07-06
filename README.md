@@ -32,7 +32,31 @@ PS: [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html) �
 
 [simple-virtual-dom](https://github.com/livoras/simple-virtual-dom)
 
+## netxTick
+
+```js
+console.log(1);
+Promise.resolve().then(() => console.log(2))
+setTimeout(() => console.log(3), 0);
+setTimeout(() => console.log(4), 0);
+Promise.resolve().then(() => console.log(5))
+console.log(6);
+/*
+output:
+1
+6
+2
+5
+3
+4
+*/
+```
+
+更多关于 `Promise`, `Mutation observers`, `Microtasks` 的，请查看 [Tasks, microtasks, queues and schedules](https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/).
 
 ## References
 * [MVVM](https://github.com/fastCreator/MVVM)
 * [vue come true](https://github.com/coderzzp/vue-come-true)
+* [深度剖析：如何实现一个 Virtual DOM 算法](https://github.com/livoras/blog/issues/13)
+* [Pure JavaScript HTML Parser](http://ejohn.org/blog/pure-javascript-html-parser/)
+* [simple-virtual-dom](https://github.com/livoras/simple-virtual-dom)
