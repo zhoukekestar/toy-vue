@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Vue Base</title>
+</head>
+<body>
+  <div id="app">
+    <input type="text" v-model="text">
+    {{text}}
+  </div>
+</body>
+<script>
+  /**
+   * 主题发布
+   */
+  class Dep {
+
+    constructor() {
+      // 主题的订阅者们
+      this.subs = [];
+    }
+    // 添加订阅者的方法
+    addSub(sub) {
+      this.subs.push(sub);
+    }
+    // 发布信息的方法（让订阅者watcher们全部更新view）
+    notify() {
+      this.subs.map(sub => sub.update());
+    }
+  }
+
+  /**
+   * 主题订阅
+   */
+  class Watcher {
+    constructor(vm, node, name) {
+      this.vm = vm;
+      this.node = node;
+      this.name = name;
+
+      // Dep.target 存储了当前的观察者，使 getter 函数能够当前订阅者
+      Dep.target = this;
+
+      // 订阅者执行一次更新视图
+      this.update();
+
+      // 设置 Dep.target 为 null，确保，再次调用属性的 getter 时，不会重复添加 watcher
+      Dep.target = null;
+    }
+
+    /**
+     * 更新 this.value, 更新视图，这个方法初始化需要调用
+     * 当发布者调用 notify 方法，也会被调用
+     */
+    update() {
+      // 更新 this.value
+      this.get();
+
+      // 更新视图，实际处理过程中会更为复杂
+      this.node.nodeValue = this.value;
+    }
+
+    /**
+     * 执行 this.vm[this.name] 时，由于数据已经被 observe了，所以，会调研对应的 getter 方法
+     *
+     * 所以，这句代码，会做两件事
+     * 1：从 vm 中获取数据，并赋值到 this.value 中
+     * 2：添加当前 watcher 对象到属性的 dep 中，即订阅属性变化。
+     *    通过 vm[this.name] 调用 getter 方法，由于设置了 Dep.target 为当前 watcher ，所以，当前 watcher 会自动订阅当前属性的变化
+     */
+    get() {
+      this.value = this.vm[this.name];
+    }
+  }
+
+  /**
+   * 编译 HTML 节点
+   *   view -> data: 监听绑定属性对应元素的事件，并把视图中最新的数据更新到 vue 对象中
+   *   data -> view: 绑定 vue 对象中对应的属性值，并监听属性，更新对应的 HTML
+   *
+   * @param  {Element} node - HTML节点
+   * @param  {Vue} vm - Vue 实例
+   */
+  const compile = (node, vm) => {
+    const reg = /\{\{(.*)\}\}/;
+
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      Array.from(node.attributes)
+        .filter(attr => (attr.nodeName === 'v-model'))
+        .forEach((attr) => {
+          const name = attr.nodeValue;
+          node.value = vm[name];
+
+          /**
+           * 监听 input 事件，并对相应的属性的赋值
+           * 这样会调用属性的 setter 方法，从而会使 dep 对象调用 notify 方法，进而调用 watcher 的 update 方法
+           */
+          node.addEventListener('input', (e) => {
+            vm[name] = e.target.value;
+          });
+        });
+
+    /**
+     * 将文本中的变量名替换成 data 中的数据
+     * 并根据变量名，创建一个订阅者，以便 data 对象数据改变时，能够被通知到，并及时更新文本
+     */
+    } else if (node.nodeType === Node.TEXT_NODE) {
+      if (reg.test(node.nodeValue)) {
+        const name = RegExp.$1;
+        // 新建一个订阅者
+        new Watcher(vm, node, name.trim());
+      }
+    }
+  };
+
+  /**
+   * 将节点转换成文档片段，并编译各个节点
+   * @param  {Element} node - Element Node
+   * @param  {Vue} vm - Vue instance
+   * @return {DocumentFragment}
+   */
+  const node2Fragment = (node, vm) => {
+    const docFrag = document.createDocumentFragment();
+    let child = node.firstChild;
+    while (child) {
+      compile(child, vm);
+      docFrag.appendChild(child);
+      child = node.firstChild;
+    }
+    return docFrag;
+  };
+
+  /**
+   * 响应式的数据绑定函数
+   * @param  {Object} obj - 目标对象
+   * @param  {String} key - 属性值
+   * @param  {Object} val - 属性值
+   */
+  const defineReactive = (obj, key, val) => {
+    // 定义一个主题发布类，每个data中的属性，都是一个新主题的发布者
+    const dep = new Dep();
+
+    Object.defineProperty(obj, key, {
+      get() {
+        // 添加订阅者 watcher 到主题对象 dep 中
+        if (Dep.target) dep.addSub(Dep.target);
+
+        return val;
+      },
+      set(newVal) {
+        if (newVal === val) return;
+
+        val = newVal;
+
+        // 实例发出通知（更新所有订阅了这个属性消息的view）
+        dep.notify();
+      },
+    });
+  };
+
+  // 监听vm这个对象的obj有的属性
+  /**
+   * 监听vm中data的各个属性
+   * @param  {Object} obj - data对象
+   * @param  {Vue} vm - vue实例
+   */
+  function observe(obj, vm) {
+    Object.keys(obj).map(key => defineReactive(vm, key, obj[key]));
+  }
+
+  /**
+   * Vue 对象
+   */
+  class Vue {
+    constructor(options) {
+      const el = document.querySelector(options.el);
+
+      // 监听this(即vm)这个对象的data属性
+      observe(options.data, this);
+
+      // 添加当前节点的编译结果
+      el.appendChild(node2Fragment(el, this));
+    }
+  }
+
+  const vm = new Vue({
+    el: '#app',
+    data: {
+      text: 'Hello World!',
+    },
+  });
+  console.log(vm);
+</script>
+</html>
