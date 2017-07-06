@@ -6,7 +6,9 @@
 Vue toys.
 
 ## [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html)
-一个不能再简单的Vue核心代码，一个不能再具体的源码分析。（此处用了夸张的修辞手法）。代码参考了[vue-come-true/vue-come-true-First](https://github.com/coderzzp/vue-come-true/blob/master/vue-come-true-First/vue-come-true.html)，在此感谢原作者的整理。
+一个不能再简单的 `Vue` 核心代码，一个不能再具体的 `Vue` 源码分析。（此处用了夸张的修辞手法）。代码参考了[vue-come-true/vue-come-true-First](https://github.com/coderzzp/vue-come-true/blob/master/vue-come-true-First/vue-come-true.html)，在此感谢原作者的整理。
+
+PS: [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html) 需要在最新的 `Chrome` 上运行，因为用到了很多 `ES6` 的特性，比如：`class`, `arrow function` 等。当然，作为一个前端，我默认你的 `Chrome` 版本已经是最新了。
 
 #### Vue 创建流程
 ![vue-base](https://user-images.githubusercontent.com/7157346/27902223-852f21c2-6267-11e7-9db5-420a70bed0ca.jpg)
