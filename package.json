@@ -4,6 +4,8 @@
   "description": "Vue toys",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build:vdom",
+    "build:vdom": "browserify src/vdom/simple-virtual-dom.js -o dist/svd.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/zhoukekestar/toy-vue/issues"
   },
-  "homepage": "https://github.com/zhoukekestar/toy-vue#readme"
+  "homepage": "https://github.com/zhoukekestar/toy-vue#readme",
+  "dependencies": {
+    "list-diff2": "^0.1.4"
+  }
 }
