@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      body {
+        width: 980px;
+        margin: auto;
+        padding: 50px 0;
+        display: flex;
+        align-items: center;
+      }
+      textarea {
+        display: block;
+        width: 420px;
+        height: 400px;
+      }
+      button {
+        height: 40px;
+        flex-grow: 1;
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id='from'>
+      <!-- hello world -->
+      <p id="test" name='hello'>hello <i>world
+      <input id='input' /><p>Yeah!</p>
+    </textarea>
+    <button id='transform'>transform -></button>
+    <textarea id='to'></textarea>
+    <script src='./compiler/html-parser.js'></script>
+    <script>
+
+      document.querySelector('#transform').onclick = () => {
+        let results = '';
+        window.HTMLParser(document.querySelector('#from').value, {
+          start(tag, attrs, unary) {
+            results += `<${tag}`;
+
+            for (let i = 0; i < attrs.length; i += 1) {
+              results += ` ${attrs[i].name}="${attrs[i].escaped}"`;
+            }
+
+            results += `${unary ? '/' : ''}>`;
+          },
+          end(tag) {
+            results += `</${tag}>`;
+          },
+          chars(text) {
+            results += text;
+          },
+          comment(text) {
+            results += `<!--${text}-->`;
+          },
+        });
+
+        document.querySelector('#to').value = results;
+      };
+    </script>
+  </body>
+</html>

@@ -26,7 +26,7 @@ PS: [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html) �
 
 ## HTML Parser
 
-[pure-javascript-html-parser](http://ejohn.org/blog/pure-javascript-html-parser/)
+基于[pure-javascript-html-parser](http://ejohn.org/blog/pure-javascript-html-parser/)的`HTML Parser`。 [在线测试](https://zhoukekestar.github.io/toy-vue/src/html-parser.html)。
 
 ## Virtual Dom
 
