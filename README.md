@@ -21,12 +21,24 @@ PS: [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html) �
 
 #### 注意点
 * 图中的 `DocumentFragment` 在实际代码中会用 `Virtual Dom` 代替
-* 图中的 `Compile` 在实际代码中会用 `HTML Parser` 做一些更具体的操作。
+* 图中的 `Compile` 在实际代码中会用 `HTML Parser` 做一些更具体的操作。如编译模板成可生成 `Virtual Dom` 的代码, 具体可查看`/test/vue-template-compiler`
+
+  ```html
+  <div id="list" v-test><span>Hello</span></div>
+  ```
+
+  编译成 (使用`vue-template-compiler`) ==>
+
+  ```js
+  with(this){return _c('div',{directives:[{name:"test",rawName:"v-test"}],attrs:{"id":"list"}},[_c('span',[_v("Hello")])])}
+  ```
 * 图中的 `setter` 和 `getter` 方法在实际代码中，还需要对 `Array` 中`push`，`pop`方法进行拦截，还需要对 `data` 进行`深度`绑定。
 
 ## HTML Parser
 
-基于[pure-javascript-html-parser](http://ejohn.org/blog/pure-javascript-html-parser/)的`HTML Parser`。 [在线测试](https://zhoukekestar.github.io/toy-vue/src/html-parser.html)。
+基于[pure-javascript-html-parser](http://ejohn.org/blog/pure-javascript-html-parser/)的`HTML Parser`。 [在线测试]()。Vue 中对应的代码[html-parser](https://sourcegraph.com/github.com/vuejs/vue/-/blob/src/compiler/parser/html-parser.js#L8:33)
+
+创建 virtual dom 的代码通过[render](https://sourcegraph.com/github.com/vuejs/vue/-/blob/src/compiler/parser/index.js)
 
 ## Virtual Dom
 
