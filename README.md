@@ -34,11 +34,23 @@ PS: [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html) �
   ```
 * 图中的 `setter` 和 `getter` 方法在实际代码中，还需要对 `Array` 中`push`，`pop`方法进行拦截，还需要对 `data` 进行`深度`绑定。
 
-## HTML Parser
+## Simple Vue Compiler
 
-基于[pure-javascript-html-parser](http://ejohn.org/blog/pure-javascript-html-parser/)的`HTML Parser`。 [在线测试]()。Vue 中对应的代码[html-parser](https://sourcegraph.com/github.com/vuejs/vue/-/blob/src/compiler/parser/html-parser.js#L8:33)
+`Simple Vue Compiler`基于[pure-javascript-html-parser](http://ejohn.org/blog/pure-javascript-html-parser/)的`HTML Parser`（你可以[在线测试](https://zhoukekestar.github.io/toy-vue/src/html-parser.html)这个模块）。
 
-创建 virtual dom 的代码通过[render](https://sourcegraph.com/github.com/vuejs/vue/-/blob/src/compiler/parser/index.js)
+[ASTElement](https://sourcegraph.com/github.com/vuejs/vue/-/blob/flow/compiler.js#L69:14) 是从 HTML 转换到可 render 的代码过程中的中间对象。`AST`(`Abstract Syntax Tree`): 抽象语法树。（我们在写这个编译器的时候，AST 参考[Hypertext Abstract Syntax Tree format ](https://github.com/syntax-tree/hast))
+
+基本的过程是：`模板` => `HTML 模板解析器` => `抽象语法树` => `生成可Render的代码`。
+
+[在线测试 Simple Vue Compiler](https://zhoukekestar.github.io/toy-vue/src/vue-parser.html) ，降模板编译成可Render代码的简易实现。
+![qq 20170710222219](https://user-images.githubusercontent.com/7157346/28022628-4df25cba-65be-11e7-9d1d-ae22d578b200.png)
+
+
+Vue 中对应的代码
+* [html-parser](https://sourcegraph.com/github.com/vuejs/vue/-/blob/src/compiler/parser/html-parser.js#L8:33)
+* [ASTElement](https://sourcegraph.com/github.com/vuejs/vue/-/blob/flow/compiler.js#L79:25)
+
+生成可 `render` 代码后，便可以通过[render](https://sourcegraph.com/github.com/vuejs/vue/-/blob/src/compiler/parser/index.js)函数创建 `virtual dom` 了。
 
 ## Virtual Dom
 

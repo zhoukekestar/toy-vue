@@ -25,41 +25,148 @@
   </head>
   <body>
     <textarea id='from'>
-      <input type="text" v-model="text">
-      {{text}}
+      <div id='root'>
+        <div class='first'>
+          <p class='p second'>
+            <i>i</i>
+            <span>span</span>
+          </p>
+          <h1></h1>
+        </div>
+        <input type="text" value="text">
+        <p class='last'>{{text}}</p>
+      </div>
     </textarea>
     <button id='transform'>transform -></button>
     <textarea id='to'></textarea>
     <script src='./compiler/html-parser.js'></script>
     <script>
+      // 参考 https://github.com/syntax-tree/hast
+      class ASTElement {
+        constructor(o) {
+          Object.assign(this, o);
+          this.type = o.type || '';
+          this.tagName = o.tagName || '';
+          this.properties = o.properties || {};
+          this.children = o.children || [];
+          this.parent = o.parent;
+        }
+
+        toString() {
+          let level = this.level;
+          let space = '';
+          while (level--) {
+            space += '  ';
+          }
+
+          if (this.type === 'text') {
+            return `\n${space}_s("${this.value}")\n`;
+          }
+
+
+          let str = '';
+          if (this.tagName) {
+            str += `\n${space}_c('${this.tagName}'`;
+          }
+
+          if (Object.keys(this.properties).length > 0) {
+            str += `,\n${space}attrs: ${JSON.stringify(this.properties)}`;
+          }
+
+          if (this.children.length > 0) {
+            str += `,\n${space}[${this.children.map(child => child.toString()).join(`${space}  ,`)}${space}]`;
+          }
+
+          str += `\n${space})\n`
+          return str;
+        }
+      }
+
+
+
       /*
       with(this){return _c('div',[_c('input',{directives:[{name:"model",rawName:"v-model",value:(text),expression:"text"}],attrs:{"type":"text"},domProps:{"value":(text)},on:{"input":function($event){if($ev
       ent.target.composing)return;text=$event.target.value}}}),_c('p',[_v(_s(text))])])}
        */
       document.querySelector('#transform').onclick = () => {
+        const elements = [];
+        let current = elements;
+        let level = 1;
+
         let results = 'with(this) { return ';
         window.HTMLParser(document.querySelector('#from').value, {
           start(tag, attrs, unary) {
-            results += `<${tag}`;
 
-            for (let i = 0; i < attrs.length; i += 1) {
-              results += ` ${attrs[i].name}="${attrs[i].escaped}"`;
+            const properties = {};
+            attrs.forEach(attr => {
+              properties[attr.name] = attr.value;
+            })
+            const ele = new ASTElement({
+              type: 'element',
+              tagName: tag,
+              properties,
+              parent: current,
+              level,
+            });
+
+            if (current.children) {
+              current.children.push(ele);
+            } else {
+              current.push(ele)
             }
 
-            results += `${unary ? '/' : ''}>`;
+            if (!unary) {
+              level ++;
+              current = ele;
+            }
+            // console.log(elements);
           },
           end(tag) {
-            results += `</${tag}>`;
+            level --;
+            current = current.parent;
+            // console.log(elements);
           },
           chars(text) {
-            results += text;
+            text = text.trim();
+            if (text.length === 0) return;
+
+            const ele = new ASTElement({
+              type: 'text',
+              value: text,
+              level,
+              parent: current,
+            })
+
+            if (current.children) {
+              current.children.push(ele);
+            } else {
+              current.push(ele)
+            }
+
+            // console.log(elements);
           },
           comment(text) {
-            results += `<!--${text}-->`;
+            const ele = new ASTElement({
+              type: 'comment',
+              value: text,
+              level,
+              parent: current,
+            });
+
+            if (current.children) {
+              current.children.push(ele);
+            } else {
+              current.push(ele)
+            }
+
+            // console.log(elements);
           },
         });
 
-        results += '}';
+        results += elements.map(ele => ele.toString()).join(',');
+        results += '\n}';
+        console.log(elements)
+
         document.querySelector('#to').value = results;
       };
     </script>
