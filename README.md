@@ -79,3 +79,6 @@ output:
 * [深度剖析：如何实现一个 Virtual DOM 算法](https://github.com/livoras/blog/issues/13)
 * [Pure JavaScript HTML Parser](http://ejohn.org/blog/pure-javascript-html-parser/)
 * [simple-virtual-dom](https://github.com/livoras/simple-virtual-dom)
+* [aboutVue](https://github.com/banama/aboutVue)
+* [vue-analysis](https://github.com/Ma63d/vue-analysis)
+* [read-vue-source-code](https://github.com/numbbbbb/read-vue-source-code)
