@@ -56,6 +56,7 @@ Vue 中对应的代码
 
 * [simple-virtual-dom](https://github.com/livoras/simple-virtual-dom)
 * [深度剖析：如何实现一个 Virtual DOM 算法](https://github.com/livoras/blog/issues/13)
+* [最小编辑距离问题：递归与动态规划](https://github.com/youngwind/blog/issues/106)
 
 ## netxTick
 
