@@ -54,7 +54,8 @@ Vue 中对应的代码
 
 ## Virtual Dom
 
-[simple-virtual-dom](https://github.com/livoras/simple-virtual-dom)
+* [simple-virtual-dom](https://github.com/livoras/simple-virtual-dom)
+* [深度剖析：如何实现一个 Virtual DOM 算法](https://github.com/livoras/blog/issues/13)
 
 ## netxTick
 
