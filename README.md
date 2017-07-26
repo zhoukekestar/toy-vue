@@ -14,6 +14,10 @@ PS: [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html) �
 ![vue-base](https://user-images.githubusercontent.com/7157346/27902223-852f21c2-6267-11e7-9db5-420a70bed0ca.jpg)
 
 #### Dep 和 Watcher 关系
+
+* 模板中的每一个变量都是一个 `Watcher`, 通过 `getter` 加入到 `Dep` 的 `subs` 数组中
+* 数据中的每一个属性都是一个 `Dep`，通过 `setter` 获得更新通知，并告知 `subs` 中的 `watcher` 调用 `update` 方法
+
 ![dep-watcher](https://user-images.githubusercontent.com/7157346/27902225-8675656e-6267-11e7-8769-6914a70cbf25.jpg)
 
 #### 流程图下载
@@ -33,6 +37,9 @@ PS: [vue-base.html](https://zhoukekestar.github.io/toy-vue/src/vue-base.html) �
   with(this){return _c('div',{directives:[{name:"test",rawName:"v-test"}],attrs:{"id":"list"}},[_c('span',[_v("Hello")])])}
   ```
 * 图中的 `setter` 和 `getter` 方法在实际代码中，还需要对 `Array` 中`push`，`pop`方法进行拦截，还需要对 `data` 进行`深度`绑定。
+* 数据监听缺陷
+  * 无法监听通过数组下标更新的数据
+  * 无法监听数组 length 的变化
 
 ## Simple Vue Compiler
 
